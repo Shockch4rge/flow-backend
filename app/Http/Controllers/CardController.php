@@ -28,14 +28,22 @@ class CardController extends Controller
         return Card::find($id);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
-        //
+        Card::destroy($id);
+        return response();
+    }
+
+    public function getFolderCards(string $id)
+    {
+        return Card::where("folder_id", $id)->get();
+    }
+
+    public function move(Request $request, string $id)
+    {
+        $card = Card::find($id);
+        $card->folder_id = $request->folderId;
+        $card->save();
+        return response();
     }
 }
