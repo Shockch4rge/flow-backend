@@ -4,7 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -12,12 +13,9 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('boards', function (Blueprint $table) {
-            $table->uuid();
-            $table->string("title");
-            $table->text("description")->nullable();
-            $table->string("author");
-            $table->timestamps();
+        Schema::table('cards', function (Blueprint $table) {
+            // folder_index column: based on number of cards in the folder
+            $table->integer("folder_index")->default(0);
         });
     }
 
@@ -28,6 +26,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('boards');
+        Schema::dropIfExists('cards');
     }
 };

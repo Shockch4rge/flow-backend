@@ -14,7 +14,14 @@ class CardController extends Controller
 
     public function store(Request $request)
     {
-        return Card::create($request->all());
+        // create a card with default values
+        $card = new Card();
+        $card->name = $request->name;
+        $card->description = "";
+        // folder index depends on the number of cards in the folder
+        $card->folder_index = Card::where('folder_id', $request->folder_id)->count();
+        $card->folder_id = $request->folder_id;
+        $card->save();
     }
 
     public function show(string $id)
@@ -36,7 +43,8 @@ class CardController extends Controller
 
     public function getFolderCards(string $id)
     {
-        return Card::where("folder_id", $id)->get();
+        // order cards by folder index
+        return Card::where("folder_id", $id)->orderBy("folder_index", "asc")->get();
     }
 
     public function move(Request $request, string $id)
